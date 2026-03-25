@@ -28,6 +28,7 @@ import (
 	daMock "github.com/celestiaorg/celestia-node/nodebuilder/da/mocks"
 	"github.com/celestiaorg/celestia-node/nodebuilder/das"
 	dasMock "github.com/celestiaorg/celestia-node/nodebuilder/das/mocks"
+	"github.com/celestiaorg/celestia-node/nodebuilder/fibre"
 	"github.com/celestiaorg/celestia-node/nodebuilder/fraud"
 	fraudMock "github.com/celestiaorg/celestia-node/nodebuilder/fraud/mocks"
 	"github.com/celestiaorg/celestia-node/nodebuilder/header"
@@ -138,6 +139,7 @@ type api struct {
 	Blob       blob.Module
 	DA         da.Module //nolint: staticcheck
 	Blobstream blobstream.Module
+	Fibre      fibre.Module
 }
 
 func TestModulesImplementFullAPI(t *testing.T) {
