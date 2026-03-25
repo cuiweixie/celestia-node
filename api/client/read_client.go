@@ -10,6 +10,7 @@ import (
 	"github.com/celestiaorg/celestia-node/libs/utils"
 	blobapi "github.com/celestiaorg/celestia-node/nodebuilder/blob"
 	blobstreamapi "github.com/celestiaorg/celestia-node/nodebuilder/blobstream"
+	fibreapi "github.com/celestiaorg/celestia-node/nodebuilder/fibre"
 	fraudapi "github.com/celestiaorg/celestia-node/nodebuilder/fraud"
 	headerapi "github.com/celestiaorg/celestia-node/nodebuilder/header"
 	shareapi "github.com/celestiaorg/celestia-node/nodebuilder/share"
@@ -33,6 +34,7 @@ type ReadClient struct {
 	Share      shareapi.Module
 	Fraud      fraudapi.Module
 	Blobstream blobstreamapi.Module
+	Fibre      fibreapi.Module
 
 	closer func() error
 }
@@ -102,6 +104,19 @@ func NewReadClient(ctx context.Context, cfg ReadConfig) (*ReadClient, error) {
 		return nil, fmt.Errorf("failed to initialize blob client: %w", err)
 	}
 
+	// Initialize fibre client
+	fibreAPI := fibreapi.API{}
+	fibreCloser, err := jsonrpc.NewClient(
+		ctx,
+		cfg.BridgeDAAddr,
+		"fibre",
+		&fibreAPI.Internal,
+		cfg.HTTPHeader,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to initialize fibre client: %w", err)
+	}
+
 	// pass prev func as value to avoid recursive call during unwrap
 	closer := func() error {
 		shareCloser()
@@ -109,6 +124,7 @@ func NewReadClient(ctx context.Context, cfg ReadConfig) (*ReadClient, error) {
 		headerCloser()
 		fraudCloser()
 		blobCloser()
+		fibreCloser()
 		return nil
 	}
 
@@ -117,6 +133,7 @@ func NewReadClient(ctx context.Context, cfg ReadConfig) (*ReadClient, error) {
 		Blobstream: &blobstreamAPI,
 		Header:     &headerAPI,
 		Blob:       &readOnlyBlobAPI{&blobAPI},
+		Fibre:      &fibreAPI,
 		closer:     closer,
 	}, nil
 }
