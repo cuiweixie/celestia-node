@@ -26,6 +26,7 @@ import (
 	"github.com/celestiaorg/go-fraud"
 
 	"github.com/celestiaorg/celestia-node/blob"
+	"github.com/celestiaorg/celestia-node/fibre"
 	"github.com/celestiaorg/celestia-node/header"
 	"github.com/celestiaorg/celestia-node/libs/utils"
 	modcore "github.com/celestiaorg/celestia-node/nodebuilder/core"
@@ -106,6 +107,16 @@ func WithMetrics(metricOpts []otlpmetrichttp.Option, nodeType node.Type) fx.Opti
 				return nil
 			}
 			return params.Client.WithMetrics()
+		}),
+		fx.Invoke(func(params struct {
+			fx.In
+			FibreClient *fibre.Client `optional:"true"`
+		},
+		) error {
+			if params.FibreClient == nil {
+				return nil
+			}
+			return params.FibreClient.WithMetrics()
 		}),
 		fx.Invoke(func(serv *blob.Service) error {
 			err := serv.WithMetrics()

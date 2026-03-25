@@ -5,6 +5,7 @@ import (
 	"github.com/celestiaorg/celestia-node/nodebuilder/blobstream"
 	"github.com/celestiaorg/celestia-node/nodebuilder/da"
 	"github.com/celestiaorg/celestia-node/nodebuilder/das"
+	"github.com/celestiaorg/celestia-node/nodebuilder/fibre"
 	"github.com/celestiaorg/celestia-node/nodebuilder/fraud"
 	"github.com/celestiaorg/celestia-node/nodebuilder/header"
 	"github.com/celestiaorg/celestia-node/nodebuilder/node"
@@ -26,4 +27,5 @@ var PackageToAPI = map[string]any{
 	"node":       &node.API{},
 	"blobstream": &blobstream.API{},
 	"da":         &da.API{},
+	"fibre":      &fibre.API{},
 }
