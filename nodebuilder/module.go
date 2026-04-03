@@ -52,7 +52,7 @@ func ConstructModule(tp node.Type, network p2p.Network, cfg *Config, store Store
 		das.ConstructModule(&cfg.DASer),
 		fraud.ConstructModule(tp),
 		blob.ConstructModule(),
-		fibre.ConstructModule(),
+		fibre.ConstructModule(&cfg.Core),
 		da.ConstructModule(),
 		node.ConstructModule(tp),
 		pruner.ConstructModule(tp),
